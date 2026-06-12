@@ -9,6 +9,26 @@
 #include <dt-bindings/zmk/keys.h>
 #include <dt-bindings/zmk/outputs.h>
 
+/*
+ * ZMK Studio support. The Redox shield has no physical layout in ZMK v0.2
+ * (only added upstream after v0.3), so we ship our own copy here.
+ * This lives in the keymap because the keymap is the last devicetree file
+ * in the build, which lets the /delete-property/ below take effect after
+ * the shield's redox.dtsi has set the legacy chosen matrix transform.
+ */
+#include "redox-layouts.dtsi"
+
+&redox_physical_layout {
+    transform = <&default_transform>;
+};
+
+/ {
+    chosen {
+        /delete-property/ zmk,matrix-transform;
+        zmk,physical-layout = &redox_physical_layout;
+    };
+};
+
 / {
     keymap {
         compatible = "zmk,keymap";
